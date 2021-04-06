@@ -1,0 +1,1 @@
+net use G: \\CENTRALSERVER\DropAndPick
