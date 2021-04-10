@@ -26,7 +26,8 @@ foreach ($user in $trainerAndTrainee) {
     # Set-ADUser $user.Name -HomeDirectory "\\CENTRALSERVER\DropAndPick" -HomeDrive "G:"
 }
 
-Copy-Item -Path ((split-path -parent $MyInvocation.MyCommand.Definition) + "\login.bat") -Destination \\CENTRALSERVER\NetLogon\ -PassThru
+# Copy-Item -Path ((split-path -parent $MyInvocation.MyCommand.Definition) + "\login.bat") -Destination \\CENTRALSERVER\NetLogon\ -PassThru
+"net use G: \\CENTRALSERVER\DropAndPick" | Out-File \\CENTRALSERVER\NetLogon\login.bat -enc ascii
 Get-ADUser -Filter * | Set-ADUser -ScriptPath "login.bat"
 
 $allTrainers = Get-ADGroupMember -identity "OnlineTrainer" -Recursive 

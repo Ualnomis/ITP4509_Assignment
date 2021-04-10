@@ -1,6 +1,8 @@
 #Get Data via Txt file
 $data = Get-Content ((split-path -parent $MyInvocation.MyCommand.Definition) + "\Trainers.txt")
-$dictory = @()
+
+# 
+$dictory = @() 
 $trainers = @()
 for ($i = 0; $i -lt $data.Length; $i++) {
     $rowData = $data[$i].Split(",")

@@ -45,5 +45,5 @@ foreach ($username in $trainerAndTrainee) {
     $action = New-FsrmAction Event -EventType Information -Body "WARNING: You have only less than 2GB storage to use."
     $Threshold = New-FsrmQuotaThreshold -Percentage 75 -Action $action
     New-FsrmQuota -Path $folderPath -Size 8GB -Threshold $Threshold
-    # New-FsrmQuotaTemplate -Name "HomeFolder_Quota" -Size 8GB -Threshold $Threshold
+    #New-FsrmQuotaTemplate -Name "HomeFolder_Quota" -Size 8GB -Threshold $Threshold
 }
