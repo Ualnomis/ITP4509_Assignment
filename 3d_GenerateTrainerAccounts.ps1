@@ -43,7 +43,9 @@ foreach ($trainer in $trainers) {
 
     # create ad user with the parameters in $trainer and set profile path to user
     New-ADUser -Name $trainer.LoginName -GivenName $trainer.FirstName -Surname $trainer.LastName -OfficePhone $trainer.Telephone -AccountPassword (ConvertTo-SecureString ($defaultPwd) -AsPlainText -Force) -Enabled $True -Description "Trainer" -ProfilePath "\\CENTRALSERVER\Profiles\$($trainer.LoginName)" -Path "OU=Trainers, OU=Workstation, DC=EndGame011 , DC=com"
-        
+    # set ad user trainer email address
+    Set-ADUser -Identity $trainer.LoginName -EmailAddress $trainer.Email    
+    
     # Add User to Group
     Add-ADGroupMember -Identity "OnlineTrainer" -Members $trainer.LoginName
 }
