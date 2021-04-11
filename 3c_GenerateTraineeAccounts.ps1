@@ -8,6 +8,17 @@ $trainees = Import-Csv -Path $CsvPath
 # output the path
 Write-Output $trainees
 
+try{
+    # try to get the OnlineTrainer Group
+    $adGroupTrainer = Get-ADGroup -Identity 'OnlineTrainer'
+
+    # print OnlineTrainer is exist
+    Write-Host $adGroupTrainer + 'is already exists'
+}catch{
+    # if the OnlineTrainer Group not exist create the OnlineTrainer Group
+    New-ADGroup -Name "OnlineTrainer" -SamAccountName "OnlineTrainer" -GroupCategory Security -GroupScope Global -DisplayName "OnlineTrainer" -Path "CN=Users,DC=EndGame011 ,DC=com" -Description "OnlineTrainer"
+}
+
 # loop each trainee in trainees
 foreach ($trainee in $trainees) {
     # set trainee as Object
