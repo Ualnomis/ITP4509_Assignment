@@ -29,6 +29,7 @@ $trainerAndTrainee = Get-ADGroupMember "Trainees"
 $trainerAndTrainee += Get-ADGroupMember "OnlineTrainer"
 
 foreach ($user in $trainerAndTrainee) { 
+    # The shared folder is automatically mapped as F: drive after the user login
     Set-ADUser $user.Name -HomeDirectory "\\CENTRALSERVER\personal\$($user.Name)" -HomeDrive "F:"
 
     #Create User Home Folder
@@ -45,10 +46,11 @@ foreach ($user in $trainerAndTrainee) {
     $ace = New-Object System.Security.AccessControl.FileSystemAccessRule(($user.Name), "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow" )
     $acl.AddAccessRule($ace)
 
+    # apply permission
     Set-Acl $folderPath -AclObject $acl
     
+    # each user will have a quota of 8GB at a warning level of 6GB.
     $action = New-FsrmAction Event -EventType Information -Body "WARNING: You have only less than 2GB storage to use."
     $Threshold = New-FsrmQuotaThreshold -Percentage 75 -Action $action
     New-FsrmQuota -Path $folderPath -Size 8GB -Threshold $Threshold
-    #New-FsrmQuotaTemplate -Name "HomeFolder_Quota" -Size 8GB -Threshold $Threshold
 }

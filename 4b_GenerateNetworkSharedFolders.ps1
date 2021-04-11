@@ -36,6 +36,7 @@ foreach ($user in $trainerAndTrainee) {
 # set user login script to map G: drive
 Get-ADUser -Filter * | Set-ADUser -ScriptPath "login.bat"
 
+# Get all user in OnlineTrainer Group
 $allTrainers = Get-ADGroupMember -identity "OnlineTrainer" -Recursive 
 foreach ($user in $allTrainers) {
     #Create User Home Folder
