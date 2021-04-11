@@ -1,4 +1,4 @@
-#Get Data via Txt file
+# Get Data via Txt file
 $data = Get-Content ((split-path -parent $MyInvocation.MyCommand.Definition) + "\Trainers.txt")
 
 # get trainers data and save to $trainers
@@ -44,6 +44,6 @@ foreach ($trainer in $trainers) {
     # create ad user with the parameters in $trainer and set profile path to user
     New-ADUser -Name $trainer.LoginName -GivenName $trainer.FirstName -Surname $trainer.LastName -OfficePhone $trainer.Telephone -AccountPassword (ConvertTo-SecureString ($defaultPwd) -AsPlainText -Force) -Enabled $True -Description "Trainer" -ProfilePath "\\CENTRALSERVER\Profiles\$($trainer.LoginName)" -Path "OU=Trainers, OU=Workstation, DC=EndGame011 , DC=com"
         
-    #Add User to Group
+    # Add User to Group
     Add-ADGroupMember -Identity "OnlineTrainer" -Members $trainer.LoginName
 }
