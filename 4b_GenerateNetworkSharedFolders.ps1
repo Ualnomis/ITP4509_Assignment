@@ -25,12 +25,6 @@ Set-Acl $folderPath -AclObject $acl
 # share to newwork
 New-SmbShare -Name "DropAndPick" -Path $folderPath -FullAccess "Authenticated Users"
 
-# get ad user
-$trainerAndTrainee = Get-ADUSER -filter 'Name -Like "*"'
-foreach ($user in $trainerAndTrainee) {
-    # Set-ADUser $user.Name -HomeDirectory "\\CENTRALSERVER\DropAndPick" -HomeDrive "G:"
-}
-
 # create a bat to map G: drive
 "net use G: \\CENTRALSERVER\DropAndPick" | Out-File \\CENTRALSERVER\NetLogon\login.bat -enc ascii
 # set user login script to map G: drive
