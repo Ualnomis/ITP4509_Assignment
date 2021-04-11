@@ -9,14 +9,13 @@ $trainees = Import-Csv -Path $CsvPath
 Write-Output $trainees
 
 try{
-    # try to get the OnlineTrainer Group
-    $adGroupTrainer = Get-ADGroup -Identity 'OnlineTrainer'
+    # try to get the Trainees Group
+    $adGroupTrainees = Get-ADGroup -Identity 'Trainees'
 
-    # print OnlineTrainer is exist
-    Write-Host $adGroupTrainer + 'is already exists'
+    Write-Host $adGroupTrainees + 'is already exists'
 }catch{
-    # if the OnlineTrainer Group not exist create the OnlineTrainer Group
-    New-ADGroup -Name "OnlineTrainer" -SamAccountName "OnlineTrainer" -GroupCategory Security -GroupScope Global -DisplayName "OnlineTrainer" -Path "CN=Users,DC=EndGame011 ,DC=com" -Description "OnlineTrainer"
+    # if the Trainees Group not exist create the Trainees Group
+    New-ADGroup -Name "Trainees" -SamAccountName "Trainees" -GroupCategory Security -GroupScope Global -DisplayName "Trainees" -Path "CN=Users,DC=EndGame011 ,DC=com" -Description "Trainees"
 }
 
 # loop each trainee in trainees

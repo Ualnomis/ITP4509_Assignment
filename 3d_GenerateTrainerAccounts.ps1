@@ -47,13 +47,14 @@ for ($i = 0; $i -lt $data.Length; $i++) {
 }
 
 try{
-    # try to get the Trainees Group
-    $adGroupTrainees = Get-ADGroup -Identity 'Trainees'
+    # try to get the OnlineTrainer Group
+    $adGroupTrainer = Get-ADGroup -Identity 'OnlineTrainer'
 
-    Write-Host $adGroupTrainees + 'is already exists'
+    # print OnlineTrainer is exist
+    Write-Host $adGroupTrainer + 'is already exists'
 }catch{
-    # if the Trainees Group not exist create the Trainees Group
-    New-ADGroup -Name "Trainees" -SamAccountName "Trainees" -GroupCategory Security -GroupScope Global -DisplayName "Trainees" -Path "CN=Users,DC=EndGame011 ,DC=com" -Description "Trainees"
+    # if the OnlineTrainer Group not exist create the OnlineTrainer Group
+    New-ADGroup -Name "OnlineTrainer" -SamAccountName "OnlineTrainer" -GroupCategory Security -GroupScope Global -DisplayName "OnlineTrainer" -Path "CN=Users,DC=EndGame011 ,DC=com" -Description "OnlineTrainer"
 }
 
 # loop each trainees
