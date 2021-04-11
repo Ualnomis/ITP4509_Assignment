@@ -1,7 +1,7 @@
 #Get Data via Txt file
 $data = Get-Content ((split-path -parent $MyInvocation.MyCommand.Definition) + "\Trainers.txt")
 
-# 
+# get trainers data and save to $ trainers
 $dictory = @() 
 $trainers = @()
 for ($i = 0; $i -lt $data.Length; $i++) {
@@ -41,7 +41,7 @@ foreach ($trainer in $trainers) {
     # default Password
     $defaultPwd = ($trainer.LastName).ToLower() + "$" + ($trainer.HKID).Substring(0, (($trainer.HKID).Length) - 3)
 
-    #New Trainer User
+    # create ad user with the parameters in $trainer and set profile path to user
     New-ADUser -Name $trainer.LoginName -GivenName $trainer.FirstName -Surname $trainer.LastName -OfficePhone $trainer.Telephone -AccountPassword (ConvertTo-SecureString ($defaultPwd) -AsPlainText -Force) -Enabled $True -Description "Tranier" -ProfilePath "\\CENTRALSERVER\Profiles\$($trainer.LoginName)" -Path "OU=Trainers, OU=Workstation, DC=EndGame011 , DC=com"
         
     #Add User to Group

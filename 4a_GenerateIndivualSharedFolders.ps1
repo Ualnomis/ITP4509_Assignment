@@ -4,6 +4,7 @@ Install-WindowsFeature -Name FS-Resource-Manager, RSAT-FSRM-Mgmt
 $folderPath = "C:\personal"
 New-Item $folderPath -ItemType Directory
 
+# set permission
 $acl = Get-Acl $folderPath
 $acl.SetAccessRuleProtection($True, $False)
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule("SYSTEM", "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow" )
@@ -17,17 +18,21 @@ $acl.AddAccessRule($ace)
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule("OnlineTrainer", "ReadData", "None", "None", "Allow" )
 $acl.AddAccessRule($ace)
 
+# apply permission
 Set-Acl $folderPath -AclObject $acl
 
+# share to network
 New-SmbShare -Name "Personal" -Path $folderPath -FullAccess "Authenticated Users"
 
-#Create New Quota Template
-$trainerAndTrainee = Get-ADUSER -filter 'Name -Like "*"'
-foreach ($username in $trainerAndTrainee) { 
-    Set-ADUser $username.Name -HomeDirectory "\\CENTRALSERVER\personal\$($username.Name)" -HomeDrive "F:"
+# get all trainer And Trainee
+$trainerAndTrainee = Get-ADGroupMember "Trainees"
+$trainerAndTrainee += Get-ADGroupMember "OnlineTrainer"
+
+foreach ($user in $trainerAndTrainee) { 
+    Set-ADUser $user.Name -HomeDirectory "\\CENTRALSERVER\personal\$($user.Name)" -HomeDrive "F:"
 
     #Create User Home Folder
-    $folderPath = "C:\personal\$($username.Name)"
+    $folderPath = "C:\personal\$($user.Name)"
     New-Item $folderPath -ItemType Directory
 
     #Set Permission
@@ -37,7 +42,7 @@ foreach ($username in $trainerAndTrainee) {
     $acl.SetAccessRule($ace)
     $ace = New-Object System.Security.AccessControl.FileSystemAccessRule("Administrators", "FullControl", "ContainerInherit, ObjectInherit","None", "Allow" )
     $acl.AddAccessRule($ace)
-    $ace = New-Object System.Security.AccessControl.FileSystemAccessRule(($username.Name), "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow" )
+    $ace = New-Object System.Security.AccessControl.FileSystemAccessRule(($user.Name), "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow" )
     $acl.AddAccessRule($ace)
 
     Set-Acl $folderPath -AclObject $acl
